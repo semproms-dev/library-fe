@@ -1,27 +1,28 @@
 import { createRouter, createRoute, createRootRoute } from "@tanstack/react-router";
 import App from "../App";
+import {SearchBookComponent} from "../pages/SearchBookComponent.tsx";
 
 // Root route (layout principal)
 const rootRoute = createRootRoute({
     component: App,
 });
 
-// Home route
-const homeRoute = createRoute({
+// Search Books Screen
+const searchBooksRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: "/",
-    component: () => <h2></h2>,
+    component: () => <h2><SearchBookComponent></SearchBookComponent></h2>,
 });
 
-// About route
-const aboutRoute = createRoute({
+// Insert Books Screen
+const insertBooksRoute = createRoute({
     getParentRoute: () => rootRoute,
-    path: "/about",
+    path: "/insertBook",
     component: () => <h2></h2>,
 });
 
 // Route tree
-const routeTree = rootRoute.addChildren([homeRoute, aboutRoute]);
+const routeTree = rootRoute.addChildren([searchBooksRoute, insertBooksRoute]);
 
 // Crear router
 export const router = createRouter({ routeTree });
