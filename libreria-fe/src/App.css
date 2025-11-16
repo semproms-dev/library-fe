@@ -40,3 +40,55 @@
 .read-the-docs {
   color: #888;
 }
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.tabs-container {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 30px;
+    background-color: #f8f9fa;
+    border-radius: 8px 8px 0 0;
+    padding: 4px;
+}
+
+.tab {
+    padding: 14px 28px;
+    text-decoration: none;
+    color: #666;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tab:hover {
+    color: #333;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.tab.active {
+    color: #007bff;
+    background-color: white;
+    font-weight: 600;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab-content {
+    padding: 20px 0;
+    min-height: 400px;
+}
