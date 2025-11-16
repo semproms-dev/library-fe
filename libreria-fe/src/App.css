@@ -3,6 +3,16 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+html[data-theme="Dark"] #root {
+  background-color: #1a1a1a;
+}
+
+[data-theme="Dark"] #root {
+  background-color: #1a1a1a;
 }
 
 .logo {
@@ -52,6 +62,10 @@ h1 {
     color: #333;
 }
 
+[data-theme="Dark"] h1 {
+    color: #e0e0e0;
+}
+
 .tabs-container {
     display: flex;
     gap: 0;
@@ -60,6 +74,20 @@ h1 {
     background-color: #f8f9fa;
     border-radius: 8px 8px 0 0;
     padding: 4px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="Dark"] .tabs-container {
+    background-color: #2d2d2d;
+    border-bottom-color: #444;
+}
+
+[data-theme="Dark"] .img {
+    filter: invert(1)
+}
+
+[data-theme="Dark"] .img {
+    filter: invert(0)
 }
 
 .tab {
@@ -76,9 +104,18 @@ h1 {
     position: relative;
 }
 
+[data-theme="Dark"] .tab {
+    color: #aaa;
+}
+
 .tab:hover {
     color: #333;
     background-color: rgba(0, 123, 255, 0.1);
+}
+
+[data-theme="Dark"] .tab:hover {
+    color: #fff;
+    background-color: rgba(64, 142, 224, 0.2);
 }
 
 .tab.active {
@@ -86,6 +123,12 @@ h1 {
     background-color: white;
     font-weight: 600;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="Dark"] .tab.active {
+    color: #408EE0;
+    background-color: #1a1a1a;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .tab-content {
