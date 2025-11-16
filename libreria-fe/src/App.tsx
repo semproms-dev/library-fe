@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from '@tanstack/react-router';
-import { Group } from '@mantine/core';
+import { Group, Container, Title } from '@mantine/core';
 import './App.css';
 import bookIcon from './assets/book-icon.jpg';
 
@@ -7,14 +7,14 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="app-container">
-      <Group>
+    <Container size="xl" py="xl">
+      <Group gap="md" mb="xl" align="center" justify="center" style={{ paddingLeft: '1px' }}>
         <img
           src={bookIcon}
           alt="Book icon"
-          style={{ width: '64px', height: '64px', marginBottom: '15px' }}
+          style={{ width: '64px', height: '64px', objectFit: 'contain', paddingBottom: '10px' }}
         />
-        <h1>Library</h1>
+        <Title order={1}>Library</Title>
       </Group>
 
       <div className="tabs-container">
@@ -31,7 +31,7 @@ function App() {
       <div className="tab-content">
         <Outlet />
       </div>
-    </div>
+    </Container>
   );
 }
 
