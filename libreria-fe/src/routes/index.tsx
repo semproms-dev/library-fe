@@ -1,6 +1,5 @@
 import { createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
 import App from '../App';
-import { InsertBookComponent } from '../pages/InsertBookComponent.tsx';
 import { GenericBookComponent } from '../pages/GenericBookComponent.tsx';
 
 // Root route (layout principal)
