@@ -3,6 +3,8 @@
 import type { ContextModalProps } from '@mantine/modals';
 import { Table, Button, Box, Title, Text } from '@mantine/core';
 import React from 'react';
+import { useBooks } from '../api/query.books.api.ts';
+import { BounceLoader } from 'react-spinners';
 
 // Tipos de datos que tu tabla mostrará
 interface SearchItem {
@@ -25,13 +27,24 @@ interface SearchModalInnerProps {
 type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
 const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, innerProps }) => {
-  const { data, searchParams } = innerProps;
+  const { searchParams } = innerProps;
+  const { data, isLoading } = useBooks('author', 'Asimov');
 
-  const rows = data.map((element) => (
-    <Table.Tr key={element.id}>
-      <Table.Td>{element.id}</Table.Td>
-      <Table.Td>{element.name}</Table.Td>
-      <Table.Td>{element.value}</Table.Td>
+  if (isLoading) {
+    return (
+      <BounceLoader color={'blue'} loading={isLoading} size={150} aria-label={'Loading spinner'} />
+    );
+  }
+
+  const rows = data?.map((element) => (
+    <Table.Tr key={element.bookId}>
+      <Table.Td>{element.bookId}</Table.Td>
+      <Table.Td>{element.title}</Table.Td>
+      <Table.Td>{element.author}</Table.Td>
+      <Table.Td>{element.status}</Table.Td>
+      <Table.Td>{element.genre}</Table.Td>
+      <Table.Td>{element.language}</Table.Td>
+      <Table.Td>{element.owner}</Table.Td>
     </Table.Tr>
   ));
 
@@ -46,8 +59,12 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
-            <Table.Th>Nombre</Table.Th>
-            <Table.Th>Valor</Table.Th>
+            <Table.Th>Title</Table.Th>
+            <Table.Th>Author</Table.Th>
+            <Table.Th>Status</Table.Th>
+            <Table.Th>Genre</Table.Th>
+            <Table.Th>Language</Table.Th>
+            <Table.Th>Owner</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

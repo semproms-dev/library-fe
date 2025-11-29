@@ -1,13 +1,19 @@
 import { Button, Select, Group, TextInput, Text, Stack, Box, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { modals } from '@mantine/modals';
+import { useConfig } from '../api/query.config.api.ts';
 
 type Props = {
   component: string;
 };
 
 export function GenericBookComponent(props: Props) {
-  const isSearch = props.component === 'search';
+  const { data: config, isLoading, error } = useConfig();
+  const genres = config?.genre ?? [];
+  const owners = config?.owner ?? [];
+  const status = config?.status ?? [];
+  const location = config?.location ?? [];
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -22,6 +28,11 @@ export function GenericBookComponent(props: Props) {
     },
   });
 
+  const isSearch = props.component === 'search';
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
+
   return (
     <Container size="md" style={{ display: 'flex', justifyContent: 'center' }}>
       <Stack gap="md" style={{ width: '100%', maxWidth: '800px' }}>
@@ -31,7 +42,8 @@ export function GenericBookComponent(props: Props) {
             label={'Select Genre'}
             placeholder={'Pick a value'}
             searchable
-            data={['Fantasy', 'Science Fiction', 'Biology']}
+            //clearable TODO Dark theme
+            data={genres}
             {...form.getInputProps('genre')}
           />
         </Group>
@@ -40,7 +52,7 @@ export function GenericBookComponent(props: Props) {
           <Select
             label={'Owner'}
             placeholder={'Select an owner'}
-            data={['Cristina', 'Luis']}
+            data={owners}
             {...form.getInputProps('owner')}
           />
         </Group>
@@ -53,7 +65,7 @@ export function GenericBookComponent(props: Props) {
           <Select
             label={'Status'}
             placeholder={'Select a status'}
-            data={['TBR', 'R', 'WIP', 'HB']}
+            data={status}
             {...form.getInputProps('status')}
           />
         </Group>
@@ -63,7 +75,7 @@ export function GenericBookComponent(props: Props) {
             label={'Location'}
             placeholder={'Location'}
             searchable
-            data={['Office1', 'Office2', 'Office3']}
+            data={location}
             {...form.getInputProps('location')}
           />
         </Group>
