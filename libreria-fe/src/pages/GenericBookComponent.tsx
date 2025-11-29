@@ -1,15 +1,6 @@
-import {
-  Button,
-  Select,
-  Group,
-  TextInput,
-  Text,
-  Stack,
-  Box,
-  Container,
-  useMantineColorScheme,
-} from '@mantine/core';
+import { Button, Select, Group, TextInput, Text, Stack, Box, Container } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { ClipLoader } from 'react-spinners';
 import { modals } from '@mantine/modals';
 import { useConfig } from '../api/query.config.api.ts';
 
@@ -23,7 +14,6 @@ export function GenericBookComponent(props: Props) {
   const owners = config?.owner ?? [];
   const status = config?.status ?? [];
   const location = config?.location ?? [];
-  const theme = useMantineColorScheme();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -41,7 +31,12 @@ export function GenericBookComponent(props: Props) {
 
   const isSearch = props.component === 'search';
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="spinner-container">
+        <ClipLoader size={50} color="#4f46e5" />
+      </div>
+    );
   if (error) return <p>Error</p>;
 
   return (
