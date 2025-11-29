@@ -1,4 +1,14 @@
-import { Button, Select, Group, TextInput, Text, Stack, Box, Container } from '@mantine/core';
+import {
+  Button,
+  Select,
+  Group,
+  TextInput,
+  Text,
+  Stack,
+  Box,
+  Container,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { modals } from '@mantine/modals';
 import { useConfig } from '../api/query.config.api.ts';
@@ -13,6 +23,7 @@ export function GenericBookComponent(props: Props) {
   const owners = config?.owner ?? [];
   const status = config?.status ?? [];
   const location = config?.location ?? [];
+  const theme = useMantineColorScheme();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -42,7 +53,7 @@ export function GenericBookComponent(props: Props) {
             label={'Select Genre'}
             placeholder={'Pick a value'}
             searchable
-            //clearable TODO Dark theme
+            clearable
             data={genres}
             {...form.getInputProps('genre')}
           />
@@ -52,6 +63,7 @@ export function GenericBookComponent(props: Props) {
           <Select
             label={'Owner'}
             placeholder={'Select an owner'}
+            clearable
             data={owners}
             {...form.getInputProps('owner')}
           />
@@ -64,6 +76,7 @@ export function GenericBookComponent(props: Props) {
           />
           <Select
             label={'Status'}
+            clearable
             placeholder={'Select a status'}
             data={status}
             {...form.getInputProps('status')}
@@ -73,6 +86,7 @@ export function GenericBookComponent(props: Props) {
           <TextInput label={'Year'} placeholder={'Year'} {...form.getInputProps('year')} />
           <Select
             label={'Location'}
+            clearable
             placeholder={'Location'}
             searchable
             data={location}
