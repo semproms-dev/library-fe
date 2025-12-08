@@ -1,9 +1,7 @@
-// SearchResultsModal.tsx
-// SearchResultsModal.tsx
 import type { ContextModalProps } from '@mantine/modals';
-import { Table, Button, Box, Title, Text } from '@mantine/core';
-import React from 'react';
-import { useBooks } from '../api/query.books.api.ts';
+import { Table, Button, Box, Title, Text, Modal } from '@mantine/core';
+import React, { useState } from 'react';
+import { type Form, useBooks } from '../api/query.books.api.ts';
 import { BounceLoader } from 'react-spinners';
 
 // Tipos de datos que tu tabla mostrará
@@ -12,8 +10,30 @@ interface SearchItem {
   name: string;
   value: number;
 }
+
+interface Book {
+  BookId: number;
+  Title: string;
+  Author: string;
+  Year: number;
+  BookType: string;
+  Genre: string;
+  Owner: string;
+  Status: string;
+  Location: string;
+  Language: string;
+}
+
 interface SearchParams {
   status: string;
+  title: string;
+  author: string;
+  genre: string;
+  year: number;
+  owner: string;
+  bookType: string;
+  location: string;
+  language: string;
   dateRange: string;
 }
 
@@ -28,7 +48,21 @@ type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
 const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, innerProps }) => {
   const { searchParams } = innerProps;
-  const { data, isLoading } = useBooks('author', 'Asimov');
+  const [state, setState] = useState(true);
+
+  const emptyBookState: Form = {
+    title: searchParams.title || '',
+    author: searchParams.author || '',
+    // Use 0 as the default if year isn't found or convert the searchParam value to a number
+    year: Number(searchParams.year) || 0,
+    bookType: searchParams.bookType || '',
+    genre: searchParams.genre || '',
+    owner: searchParams.owner || '',
+    status: searchParams.status || '',
+    location: searchParams.location || '',
+    language: searchParams.language || '',
+  };
+  const { data, isLoading } = useBooks(emptyBookState);
 
   if (isLoading) {
     return (
@@ -36,44 +70,59 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
     );
   }
 
-  const rows = data?.map((element) => (
-    <Table.Tr key={element.bookId}>
-      <Table.Td>{element.bookId}</Table.Td>
-      <Table.Td>{element.title}</Table.Td>
-      <Table.Td>{element.author}</Table.Td>
-      <Table.Td>{element.status}</Table.Td>
-      <Table.Td>{element.genre}</Table.Td>
-      <Table.Td>{element.language}</Table.Td>
-      <Table.Td>{element.owner}</Table.Td>
+  const rows = data?.map((element: Book) => (
+    <Table.Tr key={element.BookId}>
+      <Table.Td>{element.BookId}</Table.Td>
+      <Table.Td>{element.Title}</Table.Td>
+      <Table.Td>{element.Author}</Table.Td>
+      <Table.Td>{element.Status}</Table.Td>
+      <Table.Td>{element.Genre}</Table.Td>
+      <Table.Td>{element.Language}</Table.Td>
+      <Table.Td>{element.Owner}</Table.Td>
     </Table.Tr>
   ));
 
   return (
-    <Box>
-      <Title order={3}>Resultados de Búsqueda</Title>
-      <Text size="sm" c="dimmed" mb="md">
-        Parámetros: Estado: **{searchParams.status}**
-      </Text>
+    <Modal
+      opened={state}
+      onClose={() => {
+        setState(false);
+      }}
+      size="auto" // modal grows to content
+      withCloseButton
+      centered
+      styles={{
+        content: {
+          padding: 0, // optional: avoids squeezing the table
+        },
+      }}
+    >
+      <Box>
+        <Title order={3}>Resultados de Búsqueda</Title>
+        <Text size="sm" c="dimmed" mb="md">
+          Parámetros: Estado: **{searchParams.status}**
+        </Text>
 
-      <Table striped withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>ID</Table.Th>
-            <Table.Th>Title</Table.Th>
-            <Table.Th>Author</Table.Th>
-            <Table.Th>Status</Table.Th>
-            <Table.Th>Genre</Table.Th>
-            <Table.Th>Language</Table.Th>
-            <Table.Th>Owner</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
+        <Table striped withTableBorder>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>ID</Table.Th>
+              <Table.Th>Title</Table.Th>
+              <Table.Th>Author</Table.Th>
+              <Table.Th>Status</Table.Th>
+              <Table.Th>Genre</Table.Th>
+              <Table.Th>Language</Table.Th>
+              <Table.Th>Owner</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
 
-      <Button onClick={() => context.closeModal(id)} mt="xl">
-        Cerrar Ventana
-      </Button>
-    </Box>
+        <Button onClick={() => context.closeModal(id)} mt="xl">
+          Cerrar Ventana
+        </Button>
+      </Box>
+    </Modal>
   );
 };
 

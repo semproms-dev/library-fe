@@ -102,7 +102,6 @@ export function GenericBookComponent(props: Props) {
                 // TODO: Implement search functionality
                 modals.openContextModal({
                   modalKey: 'searchTable',
-                  title: 'Resultados de la Búsqueda',
                   centered: true,
                   innerProps: {
                     // Estas props se envían a SearchResultsModal
