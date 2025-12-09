@@ -119,6 +119,15 @@ html[data-theme="Dark"] .mantine-Modal-content,
   border-color: #444 !important;
 }
 
+/* Modal table container styling */
+.mantine-Modal-body {
+  padding: 0 !important;
+}
+
+.mantine-Modal-body > div {
+  padding: 1rem;
+}
+
 html[data-theme="Dark"] .mantine-Modal-header,
 [data-theme="Dark"] .mantine-Modal-header {
   background-color: #2d2d2d !important;
@@ -242,4 +251,132 @@ html[data-theme="Dark"] #root {
 [data-theme="Dark"] .mantine-Stack-root,
 [data-theme="Dark"] .mantine-Group-root {
   color: #e0e0e0;
+}
+
+/* Dark theme for Mantine Table */
+html[data-theme="Dark"] .mantine-Table-root,
+[data-theme="Dark"] .mantine-Table-root {
+  background-color: transparent !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-thead,
+[data-theme="Dark"] .mantine-Table-thead {
+  background-color: #2d2d2d !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-th,
+[data-theme="Dark"] .mantine-Table-th {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border-color: #444 !important;
+  font-weight: 600 !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-tbody,
+[data-theme="Dark"] .mantine-Table-tbody {
+  background-color: #1a1a1a !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-tr,
+[data-theme="Dark"] .mantine-Table-tr {
+  border-color: #444 !important;
+  background-color: #1a1a1a !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-tr:nth-child(even),
+[data-theme="Dark"] .mantine-Table-tr:nth-child(even) {
+  background-color: #1a1a1a !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-tr[data-striped="true"],
+[data-theme="Dark"] .mantine-Table-tr[data-striped="true"],
+html[data-theme="Dark"] .mantine-Table-tr:nth-child(odd),
+[data-theme="Dark"] .mantine-Table-tr:nth-child(odd) {
+  background-color: #2d2d2d !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-tr:hover,
+[data-theme="Dark"] .mantine-Table-tr:hover {
+  background-color: #3a3a3a !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-td,
+[data-theme="Dark"] .mantine-Table-td {
+  color: #e0e0e0 !important;
+  border-color: #444 !important;
+}
+
+html[data-theme="Dark"] .mantine-Table-table,
+[data-theme="Dark"] .mantine-Table-table {
+  border-color: #444 !important;
+}
+
+/* Dark theme for Box component in modals */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root {
+  color: #e0e0e0 !important;
+}
+
+/* Dark theme for Button in modals */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root {
+  background-color: #408EE0 !important;
+  color: #fff !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:hover,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:hover {
+  background-color: #357abd !important;
+}
+
+/* Dark theme for Loader in modals */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Loader-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Loader-root {
+  color: #408EE0 !important;
+}
+
+/* Sticky container in modals */
+.mantine-Modal-body .mantine-Box-root[style*="position: sticky"] {
+  background-color: var(--mantine-color-body) !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root[style*="position: sticky"],
+[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root[style*="position: sticky"] {
+  background-color: #1a1a1a !important;
+}
+
+/* Sticky Paper component in modals */
+.mantine-Modal-body .mantine-Paper-root[style*="position: sticky"] {
+  background-color: var(--mantine-color-gray-0) !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root[style*="position: sticky"],
+[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root[style*="position: sticky"] {
+  background-color: #2d2d2d !important;
+}
+
+/* Dark theme for Paper component in modals */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root {
+  background-color: #2d2d2d !important;
+  border-color: #444 !important;
+  color: #e0e0e0 !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root .mantine-Text-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Paper-root .mantine-Text-root {
+  color: #e0e0e0 !important;
+}
+
+/* Dark theme for Badge component */
+html[data-theme="Dark"] .mantine-Badge-root,
+[data-theme="Dark"] .mantine-Badge-root {
+  color: #e0e0e0 !important;
+}
+
+html[data-theme="Dark"] .mantine-Badge-root[data-variant="light"],
+[data-theme="Dark"] .mantine-Badge-root[data-variant="light"] {
+  background-color: rgba(64, 142, 224, 0.2) !important;
+  color: #408EE0 !important;
 }

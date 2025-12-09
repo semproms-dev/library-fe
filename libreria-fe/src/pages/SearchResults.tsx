@@ -1,8 +1,7 @@
 import type { ContextModalProps } from '@mantine/modals';
-import { Table, Button, Box, Title, Text, Modal } from '@mantine/core';
-import React, { useState } from 'react';
+import { Table, Button, Box, Text, Loader, Paper, Group, Badge } from '@mantine/core';
+import React from 'react';
 import { type Form, useBooks } from '../api/query.books.api.ts';
-import { BounceLoader } from 'react-spinners';
 
 // Tipos de datos que tu tabla mostrará
 interface SearchItem {
@@ -48,7 +47,6 @@ type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
 const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, innerProps }) => {
   const { searchParams } = innerProps;
-  const [state, setState] = useState(true);
 
   const emptyBookState: Form = {
     title: searchParams.title || '',
@@ -66,63 +64,86 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
 
   if (isLoading) {
     return (
-      <BounceLoader color={'blue'} loading={isLoading} size={150} aria-label={'Loading spinner'} />
+      <Box p="xl" style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loader size="lg" color="blue" />
+      </Box>
     );
   }
 
   const rows = data?.map((element: Book) => (
     <Table.Tr key={element.BookId}>
-      <Table.Td>{element.BookId}</Table.Td>
-      <Table.Td>{element.Title}</Table.Td>
-      <Table.Td>{element.Author}</Table.Td>
-      <Table.Td>{element.Status}</Table.Td>
-      <Table.Td>{element.Genre}</Table.Td>
-      <Table.Td>{element.Language}</Table.Td>
-      <Table.Td>{element.Owner}</Table.Td>
+      <Table.Td style={{ whiteSpace: 'nowrap' }}>{element.BookId}</Table.Td>
+      <Table.Td style={{ wordBreak: 'break-word' }}>{element.Title}</Table.Td>
+      <Table.Td style={{ wordBreak: 'break-word' }}>{element.Author}</Table.Td>
+      <Table.Td style={{ whiteSpace: 'nowrap' }}>{element.Status}</Table.Td>
+      <Table.Td style={{ whiteSpace: 'nowrap' }}>{element.Genre}</Table.Td>
+      <Table.Td style={{ whiteSpace: 'nowrap' }}>{element.Language}</Table.Td>
+      <Table.Td style={{ whiteSpace: 'nowrap' }}>{element.Owner}</Table.Td>
     </Table.Tr>
   ));
 
-  return (
-    <Modal
-      opened={state}
-      onClose={() => {
-        setState(false);
-      }}
-      size="auto" // modal grows to content
-      withCloseButton
-      centered
-      styles={{
-        content: {
-          padding: 0, // optional: avoids squeezing the table
-        },
-      }}
-    >
-      <Box>
-        <Title order={3}>Resultados de Búsqueda</Title>
-        <Text size="sm" c="dimmed" mb="md">
-          Parámetros: Estado: **{searchParams.status}**
-        </Text>
+  const activeParams = Object.entries(searchParams)
+    .filter(([, v]) => v !== '' && v !== 0 && v != null);
 
-        <Table striped withTableBorder>
+  return (
+    <Box p="md">
+      <Box
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          backgroundColor: 'var(--mantine-color-body)',
+          paddingBottom: '1rem',
+          marginBottom: '1rem'
+        }}
+      >
+        {data && <Text mb="md" fw={500}>Total number of records retrieved: {data.length}</Text>}
+
+        {activeParams.length > 0 && (
+          <Paper 
+            p="md" 
+            withBorder 
+            style={{ 
+              backgroundColor: 'var(--mantine-color-gray-0)'
+            }}
+          >
+            <Text size="sm" fw={500} mb="xs">Parámetros de búsqueda:</Text>
+            <Group gap="xs">
+              {activeParams.map(([k, v]) => (
+                <Badge key={k} variant="light" color="blue">
+                  {k.charAt(0).toUpperCase() + k.slice(1)}: {v}
+                </Badge>
+              ))}
+            </Group>
+          </Paper>
+        )}
+      </Box>
+
+      {data && data.length > 0 ? (
+        <Table striped withTableBorder withColumnBorders highlightOnHover style={{ width: '100%' }}>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>ID</Table.Th>
-              <Table.Th>Title</Table.Th>
-              <Table.Th>Author</Table.Th>
-              <Table.Th>Status</Table.Th>
-              <Table.Th>Genre</Table.Th>
-              <Table.Th>Language</Table.Th>
-              <Table.Th>Owner</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '5%' }}>ID</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '25%' }}>Título</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '20%' }}>Autor</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '10%' }}>Estado</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '15%' }}>Género</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '10%' }}>Idioma</Table.Th>
+              <Table.Th style={{ whiteSpace: 'nowrap', width: '15%' }}>Propietario</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
+      ) : (
+        <Text c="dimmed" ta="center" py="xl">
+          No se encontraron resultados para la búsqueda.
+        </Text>
+      )}
 
-        <Button onClick={() => context.closeModal(id)} mt="xl">
-          Cerrar Ventana
-        </Button>
-      </Box>
-    </Modal>
+      <Button onClick={() => context.closeModal(id)} mt="md" fullWidth>
+        Cerrar Ventana
+      </Button>
+    </Box>
   );
 };
 

@@ -93,19 +93,14 @@ export function GenericBookComponent(props: Props) {
             <Button
               onClick={() => {
                 const values = form.getValues();
-                console.log('Search values:', values);
-                const mockData = [
-                  { id: 101, name: 'Registro A', value: 450 },
-                  { id: 102, name: 'Registro B', value: 820 },
-                  { id: 103, name: 'Registro C', value: 130 },
-                ];
-                // TODO: Implement search functionality
                 modals.openContextModal({
                   modalKey: 'searchTable',
+                  title: 'Resultados de la Búsqueda',
                   centered: true,
+                  size: '90%',
                   innerProps: {
                     // Estas props se envían a SearchResultsModal
-                    data: mockData,
+                    data: [],
                     searchParams: values,
                   },
                 });
