@@ -1,9 +1,24 @@
 import type { ContextModalProps } from '@mantine/modals';
-import { Table, Button, Box, Text, Loader, Paper, Group, Badge } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import {
+  Table,
+  Button,
+  Box,
+  Text,
+  Loader,
+  Paper,
+  Group,
+  Badge,
+  ActionIcon,
+  Tooltip,
+} from '@mantine/core';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { type Form, useBooks } from '../api/query.books.api.ts';
 import { BookDetail } from './BookDetail.tsx';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { useDeleteBooks } from '../api/query.delete.api.ts';
 
 // Tipos de datos que tu tabla mostrará
 interface SearchItem {
@@ -62,6 +77,8 @@ type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
 const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, innerProps }) => {
   const { searchParams } = innerProps;
+  const queryClient = useQueryClient();
+  const deleteBookMutation = useDeleteBooks();
   // Initialize with current theme state
   const [isDark, setIsDark] = useState(() => {
     if (typeof document !== 'undefined') {
@@ -158,6 +175,82 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
       >
         {element.Location}
       </Table.Td>
+      <Table.Td
+        style={{
+          whiteSpace: 'nowrap',
+          cursor: 'pointer',
+        }}
+        styles={() => ({
+          td: {
+            color: isDark ? '#e0e0e0' : '#1a1a1a',
+          },
+        })}
+      >
+        <Group gap="xs">
+          <Tooltip label={'Edit book'}>
+            <ActionIcon
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <IconEdit />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={'Remove book'}>
+            <ActionIcon
+              color={'red'}
+              onClick={(e) => {
+                e.stopPropagation();
+                modals.openConfirmModal({
+                  title: 'Delete book',
+                  centered: true,
+                  children: (
+                    <Text size="sm">
+                      Are you sure you want to delete &quot;{element.Title}&quot;? This action
+                      cannot be undone.
+                    </Text>
+                  ),
+                  labels: { confirm: 'Delete', cancel: 'Cancel' },
+                  confirmProps: {
+                    color: 'red',
+                    variant: 'filled',
+                    className: 'delete-confirm-button',
+                    style: {
+                      backgroundColor: '#fa5252',
+                      borderColor: '#fa5252',
+                    },
+                    styles: {
+                      root: {
+                        backgroundColor: '#fa5252 !important',
+                        borderColor: '#fa5252 !important',
+                        '&:hover': {
+                          backgroundColor: '#e03131 !important',
+                          borderColor: '#e03131 !important',
+                        },
+                      },
+                    },
+                  },
+                  cancelProps: { color: 'blue', variant: 'filled' },
+                  onConfirm: async () => {
+                    // Call the mutation with the book ID
+                    await deleteBookMutation.mutateAsync(element.BookId);
+                    // After deletion, update the cache manually instead of refetching
+                    queryClient.setQueryData<Book[]>(['books', emptyBookState], (oldData) => {
+                      if (!oldData) return oldData;
+                      return oldData.filter((book) => book.BookId !== element.BookId);
+                    });
+                  },
+                  onCancel: () => {
+                    console.log('Delete cancelled');
+                  },
+                });
+              }}
+            >
+              <IconTrash />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+      </Table.Td>
     </Table.Tr>
   ));
 
@@ -246,6 +339,19 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
               >
                 Location
               </Table.Th>
+              <Table.Th
+                style={{
+                  whiteSpace: 'nowrap',
+                  width: '3.5%',
+                }}
+                styles={() => ({
+                  th: {
+                    color: isDark ? '#e0e0e0' : '#1a1a1a',
+                  },
+                })}
+              >
+                Action
+              </Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
@@ -278,6 +384,6 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
       </Button>
     </Box>
   );
-};
+}
 
 export default SearchResultsModal;

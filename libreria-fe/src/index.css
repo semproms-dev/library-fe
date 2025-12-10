@@ -341,16 +341,70 @@ html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root,
   color: #e0e0e0 !important;
 }
 
-/* Dark theme for Button in modals */
-html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root,
-[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root {
+/* Dark theme for Button in modals - only apply to buttons without specific color */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:not([data-color="red"]):not([data-color="blue"]):not(.delete-confirm-button),
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:not([data-color="red"]):not([data-color="blue"]):not(.delete-confirm-button) {
   background-color: #408EE0 !important;
   color: #fff !important;
 }
 
-html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:hover,
-[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:hover {
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:not([data-color="red"]):not([data-color="blue"]):not(.delete-confirm-button):hover,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root:not([data-color="red"]):not([data-color="blue"]):not(.delete-confirm-button):hover {
   background-color: #357abd !important;
+}
+
+/* Red button in modals (for delete/confirm actions) - Dark theme - HIGH SPECIFICITY */
+html[data-theme="Dark"] .mantine-Modal-footer .mantine-Button-root.delete-confirm-button,
+[data-theme="Dark"] .mantine-Modal-footer .mantine-Button-root.delete-confirm-button,
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root.delete-confirm-button,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root.delete-confirm-button,
+html[data-theme="Dark"] .mantine-Modal-footer .delete-confirm-button,
+[data-theme="Dark"] .mantine-Modal-footer .delete-confirm-button,
+html[data-theme="Dark"] .mantine-Modal-body .delete-confirm-button,
+[data-theme="Dark"] .mantine-Modal-body .delete-confirm-button,
+html[data-theme="Dark"] .delete-confirm-button,
+[data-theme="Dark"] .delete-confirm-button {
+  background-color: #fa5252 !important;
+  background: #fa5252 !important;
+  color: #fff !important;
+  border-color: #fa5252 !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-footer .mantine-Button-root.delete-confirm-button:hover,
+[data-theme="Dark"] .mantine-Modal-footer .mantine-Button-root.delete-confirm-button:hover,
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root.delete-confirm-button:hover,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Button-root.delete-confirm-button:hover,
+html[data-theme="Dark"] .mantine-Modal-footer .delete-confirm-button:hover,
+[data-theme="Dark"] .mantine-Modal-footer .delete-confirm-button:hover,
+html[data-theme="Dark"] .mantine-Modal-body .delete-confirm-button:hover,
+[data-theme="Dark"] .mantine-Modal-body .delete-confirm-button:hover,
+html[data-theme="Dark"] .delete-confirm-button:hover,
+[data-theme="Dark"] .delete-confirm-button:hover {
+  background-color: #e03131 !important;
+  background: #e03131 !important;
+  border-color: #e03131 !important;
+}
+
+/* Red button in modals (for delete/confirm actions) - Light theme - HIGH SPECIFICITY */
+.mantine-Modal-footer .mantine-Button-root.delete-confirm-button,
+.mantine-Modal-body .mantine-Button-root.delete-confirm-button,
+.mantine-Modal-footer .delete-confirm-button,
+.mantine-Modal-body .delete-confirm-button,
+.delete-confirm-button {
+  background-color: #fa5252 !important;
+  background: #fa5252 !important;
+  color: #fff !important;
+  border-color: #fa5252 !important;
+}
+
+.mantine-Modal-footer .mantine-Button-root.delete-confirm-button:hover,
+.mantine-Modal-body .mantine-Button-root.delete-confirm-button:hover,
+.mantine-Modal-footer .delete-confirm-button:hover,
+.mantine-Modal-body .delete-confirm-button:hover,
+.delete-confirm-button:hover {
+  background-color: #e03131 !important;
+  background: #e03131 !important;
+  border-color: #e03131 !important;
 }
 
 /* Dark theme for Loader in modals */

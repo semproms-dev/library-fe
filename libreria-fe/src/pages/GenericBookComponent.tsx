@@ -95,7 +95,7 @@ export function GenericBookComponent(props: Props) {
                 const values = form.getValues();
 
                 modals.openContextModal({
-                  modalKey: 'searchTable',
+                  modal: 'searchTable',
                   title: 'Search results',
                   centered: true,
                   size: '90%',
