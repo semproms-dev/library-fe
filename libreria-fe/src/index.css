@@ -160,6 +160,29 @@ html[data-theme="Dark"] .mantine-Modal-body .mantine-Text-root,
   color: #e0e0e0 !important;
 }
 
+/* Dark theme for Text in modal body - more specific */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Text-root b,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Text-root b {
+  color: #e0e0e0 !important;
+}
+
+/* Dark theme for Box text in modals */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root .mantine-Text-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root .mantine-Text-root {
+  color: #e0e0e0 !important;
+}
+
+/* Dark theme for nested Box and Text in modals - even more specific */
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root {
+  color: #e0e0e0 !important;
+}
+
+html[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root *,
+[data-theme="Dark"] .mantine-Modal-body .mantine-Box-root * {
+  color: inherit !important;
+}
+
 html[data-theme="Dark"] .mantine-Modal-body .mantine-Stack-root,
 [data-theme="Dark"] .mantine-Modal-body .mantine-Stack-root {
   color: #e0e0e0 !important;

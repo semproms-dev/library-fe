@@ -43,8 +43,8 @@ export interface Form {
 const BookArraySchema = z.array(BookSchema);
 
 async function fetchBooks(form: Form) {
-  const res = await axios.post(`/api/books/`, form);
-  debugger;
+  const filtered = Object.fromEntries(Object.entries(form).filter(([k, v]) => v != ''));
+  const res = await axios.post(`/api/books/`, { filters: filtered });
 
   return BookArraySchema.parse(res.data);
 }
