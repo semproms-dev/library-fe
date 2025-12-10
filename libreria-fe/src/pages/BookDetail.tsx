@@ -16,7 +16,7 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
       const theme = document.documentElement.getAttribute('data-theme');
       setIsDark(theme === 'Dark');
     };
-    
+
     checkTheme();
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, {
@@ -36,8 +36,8 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
       opened={opened}
       onClose={onClose}
       title={
-        <Title 
-          order={3} 
+        <Title
+          order={3}
           style={{ margin: 0 }}
           styles={(theme) => ({
             root: {
@@ -45,7 +45,7 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
             },
           })}
         >
-          Detalles del Libro
+          Details
         </Title>
       }
       centered
@@ -54,42 +54,36 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
     >
       <Stack gap="md">
         {/* Título y Autor destacados */}
-        <Paper 
-          p="md" 
-          withBorder 
+        <Paper
+          p="md"
+          withBorder
           styles={(theme) => ({
             root: {
-              backgroundColor: isDark 
-                ? theme.colors.blue[9] 
-                : theme.colors.blue[0],
+              backgroundColor: isDark ? theme.colors.blue[9] : theme.colors.blue[0],
             },
           })}
         >
           <Stack gap="xs">
-            <Text 
-              size="xl" 
-              fw={700} 
+            <Text
+              size="xl"
+              fw={700}
               styles={(theme) => ({
                 root: {
-                  color: isDark 
-                    ? theme.colors.blue[2] 
-                    : theme.colors.blue[7],
+                  color: isDark ? theme.colors.blue[2] : theme.colors.blue[7],
                 },
               })}
             >
               {book.Title}
             </Text>
-            <Text 
-              size="lg" 
+            <Text
+              size="lg"
               styles={(theme) => ({
                 root: {
-                  color: isDark 
-                    ? theme.colors.gray[4] 
-                    : theme.colors.gray[6],
+                  color: isDark ? theme.colors.gray[4] : theme.colors.gray[6],
                 },
               })}
             >
-              por {book.Author}
+              by {book.Author}
             </Text>
           </Stack>
         </Paper>
@@ -98,8 +92,8 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
 
         {/* Información Principal */}
         <Stack gap="sm">
-          <Title 
-            order={4} 
+          <Title
+            order={4}
             size="h5"
             styles={(theme) => ({
               root: {
@@ -107,25 +101,23 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
               },
             })}
           >
-            Información Principal
+            Overview
           </Title>
           <Group gap="md">
             <div style={{ flex: 1 }}>
-              <Text 
-                size="sm" 
-                fw={500} 
+              <Text
+                size="sm"
+                fw={500}
                 mb={4}
                 styles={(theme) => ({
                   root: {
-                    color: isDark 
-                      ? theme.colors.gray[4] 
-                      : theme.colors.gray[6],
+                    color: isDark ? theme.colors.gray[4] : theme.colors.gray[6],
                   },
                 })}
               >
-                Año de Publicación
+                Publication year
               </Text>
-              <Text 
+              <Text
                 size="md"
                 styles={(theme) => ({
                   root: {
@@ -137,21 +129,19 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
               </Text>
             </div>
             <div style={{ flex: 1 }}>
-              <Text 
-                size="sm" 
-                fw={500} 
+              <Text
+                size="sm"
+                fw={500}
                 mb={4}
                 styles={(theme) => ({
                   root: {
-                    color: isDark 
-                      ? theme.colors.gray[4] 
-                      : theme.colors.gray[6],
+                    color: isDark ? theme.colors.gray[4] : theme.colors.gray[6],
                   },
                 })}
               >
-                Idioma
+                Language
               </Text>
-              <Text 
+              <Text
                 size="md"
                 styles={(theme) => ({
                   root: {
@@ -169,8 +159,8 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
 
         {/* Categorización */}
         <Stack gap="sm">
-          <Title 
-            order={4} 
+          <Title
+            order={4}
             size="h5"
             styles={(theme) => ({
               root: {
@@ -178,7 +168,7 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
               },
             })}
           >
-            Categorización
+            Category
           </Title>
           <Group gap="xs">
             {book.Genre && (
@@ -198,8 +188,8 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
 
         {/* Estado y Ubicación */}
         <Stack gap="sm">
-          <Title 
-            order={4} 
+          <Title
+            order={4}
             size="h5"
             styles={(theme) => ({
               root: {
@@ -207,23 +197,21 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
               },
             })}
           >
-            Estado y Ubicación
+            Status and location
           </Title>
           <Group gap="md">
             <div style={{ flex: 1 }}>
-              <Text 
-                size="sm" 
-                fw={500} 
+              <Text
+                size="sm"
+                fw={500}
                 mb={4}
                 styles={(theme) => ({
                   root: {
-                    color: isDark 
-                      ? theme.colors.gray[4] 
-                      : theme.colors.gray[6],
+                    color: isDark ? theme.colors.gray[4] : theme.colors.gray[6],
                   },
                 })}
               >
-                Estado
+                Status
               </Text>
               <Badge
                 size="lg"
@@ -234,21 +222,19 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
               </Badge>
             </div>
             <div style={{ flex: 1 }}>
-              <Text 
-                size="sm" 
-                fw={500} 
+              <Text
+                size="sm"
+                fw={500}
                 mb={4}
                 styles={(theme) => ({
                   root: {
-                    color: isDark 
-                      ? theme.colors.gray[4] 
-                      : theme.colors.gray[6],
+                    color: isDark ? theme.colors.gray[4] : theme.colors.gray[6],
                   },
                 })}
               >
-                Ubicación
+                Location
               </Text>
-              <Text 
+              <Text
                 size="md"
                 styles={(theme) => ({
                   root: {
@@ -268,8 +254,8 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
         {book.Owner && (
           <>
             <Stack gap="sm">
-              <Title 
-                order={4} 
+              <Title
+                order={4}
                 size="h5"
                 styles={(theme) => ({
                   root: {
@@ -277,9 +263,9 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
                   },
                 })}
               >
-                Propietario
+                Owner
               </Title>
-              <Text 
+              <Text
                 size="md"
                 styles={(theme) => ({
                   root: {
@@ -295,14 +281,12 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
         )}
 
         {/* ID del Libro (información técnica) */}
-        <Text 
-          size="xs" 
+        <Text
+          size="xs"
           ta="center"
           styles={(theme) => ({
             root: {
-              color: isDark 
-                ? theme.colors.gray[5] 
-                : theme.colors.gray[6],
+              color: isDark ? theme.colors.gray[5] : theme.colors.gray[6],
             },
           })}
         >
@@ -311,7 +295,7 @@ export function BookDetail({ book, opened, onClose }: BookDetailProps) {
 
         {/* Botón de cierre */}
         <Button onClick={onClose} fullWidth mt="md" color="#408EE0">
-          Cerrar
+          Close
         </Button>
       </Stack>
     </Modal>

@@ -96,7 +96,7 @@ export function GenericBookComponent(props: Props) {
 
                 modals.openContextModal({
                   modalKey: 'searchTable',
-                  title: 'Resultados de la Búsqueda',
+                  title: 'Search results',
                   centered: true,
                   size: '90%',
                   innerProps: {

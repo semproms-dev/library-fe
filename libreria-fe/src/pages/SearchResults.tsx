@@ -191,7 +191,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
               },
             })}
           >
-            Parámetros de búsqueda:
+            Search parameters:
           </Text>
           <Group gap="xs">
             {activeParams.map(([k, v]) => (
@@ -218,7 +218,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
                   },
                 })}
               >
-                Título
+                Title
               </Table.Th>
               <Table.Th
                 style={{
@@ -231,7 +231,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
                   },
                 })}
               >
-                Autor
+                Author
               </Table.Th>
               <Table.Th
                 style={{
@@ -244,7 +244,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
                   },
                 })}
               >
-                Ubicación
+                Location
               </Table.Th>
             </Table.Tr>
           </Table.Thead>
@@ -274,7 +274,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
       />
 
       <Button onClick={() => context.closeModal(id)} mt="md" fullWidth>
-        Cerrar Ventana
+        Close window
       </Button>
     </Box>
   );
