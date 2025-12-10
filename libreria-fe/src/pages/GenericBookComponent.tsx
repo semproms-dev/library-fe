@@ -93,6 +93,7 @@ export function GenericBookComponent(props: Props) {
             <Button
               onClick={() => {
                 const values = form.getValues();
+
                 modals.openContextModal({
                   modalKey: 'searchTable',
                   title: 'Resultados de la Búsqueda',

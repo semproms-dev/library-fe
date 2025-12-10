@@ -44,6 +44,19 @@ interface SearchModalInnerProps {
   searchParams: SearchParams;
 }
 
+function exportToLibarianFormat(author: string): string {
+  const parts = author.split(/\s+/);
+
+  if (parts.length === 1) {
+    return parts[0];
+  }
+
+  const surname = parts.pop();
+  const givenNames = parts.join(' ');
+
+  return `${surname}, ${givenNames}`;
+}
+
 // Tipado del componente de Mantine Modals
 type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
@@ -130,7 +143,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
           },
         })}
       >
-        {element.Author}
+        {exportToLibarianFormat(element.Author)}
       </Table.Td>
       <Table.Td
         style={{
