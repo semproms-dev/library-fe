@@ -14,10 +14,11 @@ export function useDeleteBooks(): UseMutationResult<void, Error, string | number
     onSuccess: (_, deletedId) => {
       // Invalidate all book queries to refetch
       queryClient.invalidateQueries({ queryKey: ['books'] });
-      toast('Success');
+      toast.success('Book deleted successfully');
       console.log('Book deleted successfully:', deletedId);
     },
     onError: (error) => {
+      toast.error('Failed to delete book');
       console.error('Error deleting book:', error);
     },
   });
