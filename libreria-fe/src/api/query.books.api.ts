@@ -42,17 +42,57 @@ export interface Form {
 
 const BookArraySchema = z.array(BookSchema);
 
-async function fetchBooks(form: Form) {
-  const filtered = Object.fromEntries(Object.entries(form).filter(([k, v]) => v != ''));
-  const res = await axios.post(`/api/books/`, { filters: filtered });
-
-  return BookArraySchema.parse(res.data);
+export interface BooksResponse {
+  data: Book[];
+  total?: number;
+  totalPages?: number;
 }
 
-export function useBooks(form: Form) {
-  return useQuery<Book[]>({
-    queryKey: ['books', form] as const,
-    queryFn: () => fetchBooks(form),
+const BooksResponseSchema = z
+  .object({
+    data: BookArraySchema,
+    pagination: z.object({
+      page: z.number(),
+      pageSize: z.number(),
+      total: z.number(),
+      totalPages: z.number(),
+    }),
+  })
+  .or(BookArraySchema);
+
+async function fetchBooks(form: Form, currentPage: number): Promise<BooksResponse> {
+  const filtered = Object.fromEntries(Object.entries(form).filter(([, v]) => v != ''));
+  const res = await axios.post(`/api/books/`, {
+    filters: filtered,
+    page: currentPage,
+    pageSize: 10,
+  });
+
+  // Check if response has pagination metadata or is just an array
+  const parsed = BooksResponseSchema.safeParse(res.data);
+  
+  if (parsed.success) {
+    if (Array.isArray(parsed.data)) {
+      // Backend returns just an array (no pagination metadata)
+      return { data: parsed.data };
+    } else {
+      // Backend returns object with metadata: { data: [...], pagination: {...} }
+      return {
+        data: parsed.data.data,
+        total: parsed.data.pagination.total,
+        totalPages: parsed.data.pagination.totalPages,
+      };
+    }
+  }
+
+  // Fallback: assume it's an array
+  return { data: BookArraySchema.parse(res.data) };
+}
+
+export function useBooks(form: Form, currentPage: number) {
+  return useQuery<BooksResponse>({
+    queryKey: ['books', form, currentPage] as const,
+    queryFn: () => fetchBooks(form, currentPage),
     enabled: Boolean(form),
   });
 }

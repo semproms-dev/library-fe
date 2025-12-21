@@ -2,7 +2,6 @@ import type { ContextModalProps } from '@mantine/modals';
 import { modals } from '@mantine/modals';
 import {
   Table,
-  Button,
   Box,
   Text,
   Loader,
@@ -11,11 +10,12 @@ import {
   Badge,
   ActionIcon,
   Tooltip,
+  Pagination,
 } from '@mantine/core';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { type Form, useBooks } from '../api/query.books.api.ts';
+import { type Form, useBooks, type BooksResponse } from '../api/query.books.api.ts';
 import { BookDetail } from './BookDetail.tsx';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { useDeleteBooks } from '../api/query.delete.api.ts';
@@ -75,7 +75,7 @@ function exportToLibarianFormat(author: string): string {
 // Tipado del componente de Mantine Modals
 type SearchResultsModalProps = ContextModalProps<SearchModalInnerProps>;
 
-const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, innerProps }) => {
+const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ innerProps }) => {
   const { searchParams } = innerProps;
   const queryClient = useQueryClient();
   const deleteBookMutation = useDeleteBooks();
@@ -116,9 +116,27 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
     location: searchParams.location || '',
     language: searchParams.language || '',
   };
-  const { data, isLoading } = useBooks(emptyBookState);
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useBooks(emptyBookState, page);
+
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
+  // Reset to page 1 when search params change
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1);
+  }, [
+    searchParams.title,
+    searchParams.author,
+    searchParams.year,
+    searchParams.bookType,
+    searchParams.genre,
+    searchParams.owner,
+    searchParams.status,
+    searchParams.location,
+    searchParams.language,
+  ]);
 
   if (isLoading) {
     return (
@@ -128,7 +146,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
     );
   }
 
-  const rows = data?.map((element: Book) => (
+  const rows = data?.data?.map((element: Book) => (
     <Table.Tr
       onClick={() => {
         setSelectedBook(element);
@@ -235,10 +253,20 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
                     // Call the mutation with the book ID
                     await deleteBookMutation.mutateAsync(element.BookId);
                     // After deletion, update the cache manually instead of refetching
-                    queryClient.setQueryData<Book[]>(['books', emptyBookState], (oldData) => {
-                      if (!oldData) return oldData;
-                      return oldData.filter((book) => book.BookId !== element.BookId);
-                    });
+                    queryClient.setQueryData<BooksResponse>(
+                      ['books', emptyBookState, page],
+                      (oldData) => {
+                        if (!oldData) return oldData;
+                        const newData = oldData.data.filter(
+                          (book) => book.BookId !== element.BookId,
+                        );
+                        return {
+                          ...oldData,
+                          data: newData,
+                          total: oldData.total ? oldData.total - 1 : undefined,
+                        };
+                      },
+                    );
                   },
                   onCancel: () => {
                     console.log('Delete cancelled');
@@ -260,12 +288,6 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
 
   return (
     <Box p="md">
-      {data && (
-        <Text mb="md" fw={500}>
-          Total number of records retrieved: <b>{data.length}</b>
-        </Text>
-      )}
-
       {activeParams.length > 0 && (
         <Paper
           p="md"
@@ -296,66 +318,87 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
         </Paper>
       )}
 
-      {data && data.length > 0 ? (
-        <Table striped withTableBorder withColumnBorders highlightOnHover style={{ width: '100%' }}>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th
-                style={{
-                  whiteSpace: 'nowrap',
-                  width: '25%',
-                }}
-                styles={() => ({
-                  th: {
-                    color: isDark ? '#e0e0e0' : '#1a1a1a',
-                  },
-                })}
-              >
-                Title
-              </Table.Th>
-              <Table.Th
-                style={{
-                  whiteSpace: 'nowrap',
-                  width: '20%',
-                }}
-                styles={() => ({
-                  th: {
-                    color: isDark ? '#e0e0e0' : '#1a1a1a',
-                  },
-                })}
-              >
-                Author
-              </Table.Th>
-              <Table.Th
-                style={{
-                  whiteSpace: 'nowrap',
-                  width: '15%',
-                }}
-                styles={() => ({
-                  th: {
-                    color: isDark ? '#e0e0e0' : '#1a1a1a',
-                  },
-                })}
-              >
-                Location
-              </Table.Th>
-              <Table.Th
-                style={{
-                  whiteSpace: 'nowrap',
-                  width: '3.5%',
-                }}
-                styles={() => ({
-                  th: {
-                    color: isDark ? '#e0e0e0' : '#1a1a1a',
-                  },
-                })}
-              >
-                Action
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
+      {data && data.data.length > 0 ? (
+        <>
+          <Table
+            striped
+            withTableBorder
+            withColumnBorders
+            highlightOnHover
+            style={{ width: '100%' }}
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th
+                  style={{
+                    whiteSpace: 'nowrap',
+                    width: '25%',
+                  }}
+                  styles={() => ({
+                    th: {
+                      color: isDark ? '#e0e0e0' : '#1a1a1a',
+                    },
+                  })}
+                >
+                  Title
+                </Table.Th>
+                <Table.Th
+                  style={{
+                    whiteSpace: 'nowrap',
+                    width: '20%',
+                  }}
+                  styles={() => ({
+                    th: {
+                      color: isDark ? '#e0e0e0' : '#1a1a1a',
+                    },
+                  })}
+                >
+                  Author
+                </Table.Th>
+                <Table.Th
+                  style={{
+                    whiteSpace: 'nowrap',
+                    width: '15%',
+                  }}
+                  styles={() => ({
+                    th: {
+                      color: isDark ? '#e0e0e0' : '#1a1a1a',
+                    },
+                  })}
+                >
+                  Location
+                </Table.Th>
+                <Table.Th
+                  style={{
+                    whiteSpace: 'nowrap',
+                    width: '3.5%',
+                  }}
+                  styles={() => ({
+                    th: {
+                      color: isDark ? '#e0e0e0' : '#1a1a1a',
+                    },
+                  })}
+                >
+                  Action
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+
+          {data.totalPages && data.totalPages > 1 && (
+            <Group justify="center" mt="md">
+              <Pagination
+                value={page}
+                onChange={setPage}
+                total={data.totalPages}
+                disabled={isLoading}
+                size="sm"
+                withEdges
+              />
+            </Group>
+          )}
+        </>
       ) : (
         <Text
           ta="center"
@@ -378,12 +421,8 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ context, id, in
           setSelectedBook(null);
         }}
       />
-
-      <Button onClick={() => context.closeModal(id)} mt="md" fullWidth>
-        Close window
-      </Button>
     </Box>
   );
-}
+};
 
 export default SearchResultsModal;
