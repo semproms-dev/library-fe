@@ -7,6 +7,7 @@ export interface Config {
   owner: string[];
   status: string[];
   location: string[];
+  bookType: string[];
 }
 
 const ConfigSchema = z.object({
@@ -14,6 +15,7 @@ const ConfigSchema = z.object({
   owner: z.array(z.string()),
   status: z.array(z.string()),
   location: z.array(z.string()),
+  bookType: z.array(z.string()),
 });
 
 async function fetchConfig(): Promise<Config> {

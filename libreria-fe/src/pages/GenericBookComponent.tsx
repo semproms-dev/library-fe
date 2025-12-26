@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import { ClipLoader } from 'react-spinners';
 import { modals } from '@mantine/modals';
 import { useConfig } from '../api/query.config.api.ts';
+import { useInsertBooks } from '../api/query.insert.api.ts';
 
 type Props = {
   component: string;
@@ -14,6 +15,8 @@ export function GenericBookComponent(props: Props) {
   const owners = config?.owner ?? [];
   const status = config?.status ?? [];
   const location = config?.location ?? [];
+  const bookType = config?.bookType ?? [];
+  const insertBookMutation = useInsertBooks();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -24,8 +27,9 @@ export function GenericBookComponent(props: Props) {
       owner: '',
       language: '',
       status: '',
-      year: '',
+      year: 0,
       location: '',
+      bookType: '',
     },
   });
 
@@ -86,6 +90,16 @@ export function GenericBookComponent(props: Props) {
             searchable
             data={location}
             {...form.getInputProps('location')}
+          />
+        </Group>
+        <Group grow>
+          <Select
+            label={'Book Type'}
+            clearable
+            placeholder={'Book Type'}
+            searchable
+            data={bookType}
+            {...form.getInputProps('bookType')}
           />
         </Group>
         <Box mt="lg" style={{ display: 'flex', justifyContent: 'center' }}>
@@ -163,6 +177,11 @@ export function GenericBookComponent(props: Props) {
                           <strong>Location:</strong> {values.location}
                         </Text>
                       )}
+                      {values.bookType && (
+                        <Text size="sm">
+                          <strong>Book Type:</strong> {values.bookType}
+                        </Text>
+                      )}
                       {!values.title &&
                         !values.author &&
                         !values.genre &&
@@ -179,10 +198,11 @@ export function GenericBookComponent(props: Props) {
                   ),
                   labels: { confirm: 'Confirm', cancel: 'Cancel' },
                   confirmProps: { color: 'blue' },
-                  onConfirm: () => {
+                  onConfirm: async () => {
                     const values = form.getValues();
                     console.log('Confirmed with values:', values);
                     // TODO: Implement insert functionality
+                    await insertBookMutation.mutateAsync(values);
                   },
                   onCancel: () => {
                     console.log('Cancelled');
