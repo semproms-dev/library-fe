@@ -1,6 +1,7 @@
 import { createRouter, createRoute, createRootRoute } from '@tanstack/react-router';
 import App from '../App';
 import { GenericBookComponent } from '../pages/GenericBookComponent.tsx';
+import { StatsComponent } from '../pages/StatsComponent.tsx';
 
 // Root route (layout principal)
 const rootRoute = createRootRoute({
@@ -29,8 +30,18 @@ const insertBooksRoute = createRoute({
   ),
 });
 
+const getStats = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/getStats',
+  component: () => (
+    <h2>
+      <StatsComponent />
+    </h2>
+  ),
+});
+
 // Route tree
-const routeTree = rootRoute.addChildren([searchBooksRoute, insertBooksRoute]);
+const routeTree = rootRoute.addChildren([searchBooksRoute, insertBooksRoute, getStats]);
 
 // Crear router
 export const router = createRouter({ routeTree });

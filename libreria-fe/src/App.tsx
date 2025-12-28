@@ -56,6 +56,9 @@ function App() {
         >
           Insert books
         </Link>
+        <Link to="/getStats" className={`tab ${location.pathname === '/getStats' ? 'active' : ''}`}>
+          Library statistics
+        </Link>
       </div>
       <div className="tab-content">
         <Outlet />
