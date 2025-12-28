@@ -209,6 +209,15 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ innerProps }) =
             <ActionIcon
               onClick={(e) => {
                 e.stopPropagation();
+                modals.openContextModal({
+                  modal: 'editBook',
+                  title: 'Edit Book',
+                  centered: true,
+                  size: 'lg',
+                  innerProps: {
+                    book: element,
+                  },
+                });
               }}
             >
               <IconEdit />

@@ -111,6 +111,22 @@ button:focus-visible {
   z-index: 1001 !important;
 }
 
+/* Ensure Select dropdowns appear above modals */
+.mantine-Select-dropdown {
+  z-index: 1002 !important;
+}
+
+.mantine-Modal-body .mantine-Select-dropdown,
+.mantine-Modal-content .mantine-Select-dropdown,
+.mantine-Modal-inner .mantine-Select-dropdown {
+  z-index: 1002 !important;
+}
+
+/* Ensure Select dropdowns in portals appear above modals */
+body > .mantine-Select-dropdown {
+  z-index: 1002 !important;
+}
+
 /* Dark theme for Mantine modals */
 html[data-theme="Dark"] .mantine-Modal-content,
 [data-theme="Dark"] .mantine-Modal-content {
