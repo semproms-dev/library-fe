@@ -31,6 +31,31 @@ export function GenericBookComponent(props: Props) {
       location: '',
       bookType: '',
     },
+    validate: {
+      title: (value) =>
+        !value || (typeof value === 'string' && value.trim() === '') ? 'Title is required' : null,
+      author: (value) =>
+        !value || (typeof value === 'string' && value.trim() === '') ? 'Author is required' : null,
+      year: (value) => {
+        const yearNum = typeof value === 'string' ? Number(value) : value;
+        if (!value || yearNum === 0 || isNaN(yearNum)) {
+          return 'Year is required';
+        }
+        if (yearNum < 0) {
+          return 'Year must be a positive number';
+        }
+        if (yearNum > new Date().getFullYear()) {
+          return `Year cannot be greater than ${new Date().getFullYear()}`;
+        }
+        return null;
+      },
+      location: (value) =>
+        !value || (typeof value === 'string' && value.trim() === '')
+          ? 'Location is required'
+          : null,
+      owner: (value) =>
+        !value || (typeof value === 'string' && value.trim() === '') ? 'Owner is required' : null,
+    },
   });
 
   const isSearch = props.component === 'search';
@@ -47,7 +72,12 @@ export function GenericBookComponent(props: Props) {
     <Container size="md" style={{ display: 'flex', justifyContent: 'center' }}>
       <Stack gap="md" style={{ width: '100%', maxWidth: '800px' }}>
         <Group grow>
-          <TextInput label={'Title'} placeholder={'Title...'} {...form.getInputProps('title')} />
+          <TextInput
+            label={'Title'}
+            placeholder={'Title...'}
+            required={!isSearch}
+            {...form.getInputProps('title')}
+          />
           <Select
             label={'Select Genre'}
             placeholder={'Pick a value'}
@@ -58,11 +88,17 @@ export function GenericBookComponent(props: Props) {
           />
         </Group>
         <Group grow>
-          <TextInput label={'Author'} placeholder={'Author'} {...form.getInputProps('author')} />
+          <TextInput
+            label={'Author'}
+            placeholder={'Author'}
+            required={!isSearch}
+            {...form.getInputProps('author')}
+          />
           <Select
             label={'Owner'}
             placeholder={'Select an owner'}
             clearable
+            required={!isSearch}
             data={owners}
             {...form.getInputProps('owner')}
           />
@@ -82,12 +118,19 @@ export function GenericBookComponent(props: Props) {
           />
         </Group>
         <Group grow>
-          <TextInput label={'Year'} placeholder={'Year'} {...form.getInputProps('year')} />
+          <TextInput
+            label={'Year'}
+            placeholder={'Year'}
+            type="number"
+            required={!isSearch}
+            {...form.getInputProps('year')}
+          />
           <Select
             label={'Location'}
             clearable
             placeholder={'Location'}
             searchable
+            required={!isSearch}
             data={location}
             {...form.getInputProps('location')}
           />
@@ -127,87 +170,92 @@ export function GenericBookComponent(props: Props) {
           ) : (
             <Button
               onClick={() => {
-                const values = form.getValues();
-                console.log('Form values:', values);
-                modals.openConfirmModal({
-                  title: 'Are you sure you want to insert this book?',
-                  centered: true,
-                  children: (
-                    <Stack gap="xs" mt="md">
-                      <Text size="sm" fw={500}>
-                        Book Details:
-                      </Text>
-                      {values.title && (
-                        <Text size="sm">
-                          <strong>Title:</strong> {values.title}
+                // Validate form before proceeding
+                const validation = form.validate();
+                if (!validation.hasErrors) {
+                  const values = form.getValues();
+                  console.log('Form values:', values);
+                  modals.openConfirmModal({
+                    title: 'Are you sure you want to insert this book?',
+                    centered: true,
+                    children: (
+                      <Stack gap="xs" mt="md">
+                        <Text size="sm" fw={500}>
+                          Book Details:
                         </Text>
-                      )}
-                      {values.author && (
-                        <Text size="sm">
-                          <strong>Author:</strong> {values.author}
-                        </Text>
-                      )}
-                      {values.genre && (
-                        <Text size="sm">
-                          <strong>Genre:</strong> {values.genre}
-                        </Text>
-                      )}
-                      {values.owner && (
-                        <Text size="sm">
-                          <strong>Owner:</strong> {values.owner}
-                        </Text>
-                      )}
-                      {values.language && (
-                        <Text size="sm">
-                          <strong>Language:</strong> {values.language}
-                        </Text>
-                      )}
-                      {values.status && (
-                        <Text size="sm">
-                          <strong>Status:</strong> {values.status}
-                        </Text>
-                      )}
-                      {values.year && (
-                        <Text size="sm">
-                          <strong>Year:</strong> {values.year}
-                        </Text>
-                      )}
-                      {values.location && (
-                        <Text size="sm">
-                          <strong>Location:</strong> {values.location}
-                        </Text>
-                      )}
-                      {values.bookType && (
-                        <Text size="sm">
-                          <strong>Book Type:</strong> {values.bookType}
-                        </Text>
-                      )}
-                      {!values.title &&
-                        !values.author &&
-                        !values.genre &&
-                        !values.owner &&
-                        !values.language &&
-                        !values.status &&
-                        !values.year &&
-                        !values.location && (
-                          <Text size="sm" c="dimmed">
-                            No values entered yet.
+                        {values.title && (
+                          <Text size="sm">
+                            <strong>Title:</strong> {values.title}
                           </Text>
                         )}
-                    </Stack>
-                  ),
-                  labels: { confirm: 'Confirm', cancel: 'Cancel' },
-                  confirmProps: { color: 'blue' },
-                  onConfirm: async () => {
-                    const values = form.getValues();
-                    console.log('Confirmed with values:', values);
-                    // TODO: Implement insert functionality
-                    await insertBookMutation.mutateAsync(values);
-                  },
-                  onCancel: () => {
-                    console.log('Cancelled');
-                  },
-                });
+                        {values.author && (
+                          <Text size="sm">
+                            <strong>Author:</strong> {values.author}
+                          </Text>
+                        )}
+                        {values.genre && (
+                          <Text size="sm">
+                            <strong>Genre:</strong> {values.genre}
+                          </Text>
+                        )}
+                        {values.owner && (
+                          <Text size="sm">
+                            <strong>Owner:</strong> {values.owner}
+                          </Text>
+                        )}
+                        {values.language && (
+                          <Text size="sm">
+                            <strong>Language:</strong> {values.language}
+                          </Text>
+                        )}
+                        {values.status && (
+                          <Text size="sm">
+                            <strong>Status:</strong> {values.status}
+                          </Text>
+                        )}
+                        {values.year && (
+                          <Text size="sm">
+                            <strong>Year:</strong> {values.year}
+                          </Text>
+                        )}
+                        {values.location && (
+                          <Text size="sm">
+                            <strong>Location:</strong> {values.location}
+                          </Text>
+                        )}
+                        {values.bookType && (
+                          <Text size="sm">
+                            <strong>Book Type:</strong> {values.bookType}
+                          </Text>
+                        )}
+                        {!values.title &&
+                          !values.author &&
+                          !values.genre &&
+                          !values.owner &&
+                          !values.language &&
+                          !values.status &&
+                          !values.year &&
+                          !values.location && (
+                            <Text size="sm" c="dimmed">
+                              No values entered yet.
+                            </Text>
+                          )}
+                      </Stack>
+                    ),
+                    labels: { confirm: 'Confirm', cancel: 'Cancel' },
+                    confirmProps: { color: 'blue' },
+                    onConfirm: async () => {
+                      const values = form.getValues();
+                      // Convert year to number if it's a string
+                      const bookData = {
+                        ...values,
+                        year: typeof values.year === 'string' ? Number(values.year) : values.year,
+                      };
+                      await insertBookMutation.mutateAsync(bookData);
+                    },
+                    onCancel: () => {},
+                  });
+                }
               }}
               color={'#408EE0'}
             >
