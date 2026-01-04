@@ -178,7 +178,7 @@ const SearchResultsModal: React.FC<SearchResultsModalProps> = ({ innerProps }) =
           },
         })}
       >
-        {exportToLibarianFormat(element.Author)}
+        {element.Author}
       </Table.Td>
       <Table.Td
         style={{

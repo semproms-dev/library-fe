@@ -27,7 +27,7 @@ export function useUpdateBooks(): UseMutationResult<void, Error, UpdateBookSchem
   return useMutation({
     mutationFn: updateBook,
     onSuccess: (_, updatedBook) => {
-      // Update all book queries in cache with the updated book data
+      // Manually update all book queries in cache with the updated book data
       queryClient.setQueriesData<BooksResponse>(
         { queryKey: ['books'] },
         (oldData) => {
@@ -59,8 +59,9 @@ export function useUpdateBooks(): UseMutationResult<void, Error, UpdateBookSchem
         },
       );
 
-      // Also invalidate to ensure we get fresh data from server
+      // Invalidate to mark queries as stale and trigger background refetch
       queryClient.invalidateQueries({ queryKey: ['books'] });
+      
       toast.success('Book updated successfully');
       console.log('Book updated successfully:', updatedBook);
     },
