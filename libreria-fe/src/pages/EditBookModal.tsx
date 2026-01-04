@@ -1,14 +1,5 @@
 import type { ContextModalProps } from '@mantine/modals';
-import {
-  Modal,
-  Button,
-  Stack,
-  TextInput,
-  Select,
-  Group,
-  Title,
-  Text,
-} from '@mantine/core';
+import { Modal, Button, Stack, TextInput, Select, Group, Title, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import { useConfig } from '../api/query.config.api.ts';
@@ -107,7 +98,10 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ context, id, innerProps }
         centered
         size="lg"
       >
-        <div className="spinner-container" style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+        <div
+          className="spinner-container"
+          style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}
+        >
           <ClipLoader size={50} color="#4f46e5" />
         </div>
       </Modal>
@@ -294,7 +288,7 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ context, id, innerProps }
             onClick={handleSubmit}
             color="#408EE0"
             loading={updateBookMutation.isPending}
-            disabled={updateBookMutation.isPending}
+            disabled={updateBookMutation.isPending || !form.isDirty()}
           >
             {updateBookMutation.isPending ? 'Updating...' : 'Update Book'}
           </Button>
@@ -305,4 +299,3 @@ const EditBookModal: React.FC<EditBookModalProps> = ({ context, id, innerProps }
 };
 
 export default EditBookModal;
-
